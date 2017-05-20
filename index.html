@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="vstdaApp">
+
+<head>
+  <meta charset="UTF-8">
+  <title>VSDTO</title>
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/toastr/toastr.css" />
+  <!-- endbower -->
+
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/app/styles/style.css">
+  <!-- endinject -->
+</head>
+
+<body class="container" ng-controller="VSTDAController as vstdaVm">
+  <div id="page">
+    <!-- For center spacing... -->
+    <div class="row">
+      <!-- Panel class -->
+      <div class="col-md-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Add ToDo item!</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="textLabel">Text:</label>
+              <input type="text" class="form-control" id="textLabel" ng-model="vstdaVm.taskText">
+            </div>
+            <div class="form-group">
+              <label for="selectOpt">Select list:</label>
+              <select class="form-control" id="selectOpt" ng-model="vstdaVm.priority" ng-options="option as option.label for option in vstdaVm.selectOptions">
+            </select>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary btn-block" ng-click="vstdaVm.AddItem()">Add Item To List</button>
+            <button type="button" class="btn btn-secondary btn-block" ng-click="vstdaVm.GetTask()">Retrieve Tasks</button>
+            <button type="button" class="btn btn-warning btn-block" ng-click="vstdaVm.DeleteTask()">Delete Task</button>
+            <button type="button" class="btn btn-success btn-block" ng-click="vstdaVm.PutTask()">Update Task</button>
+          </div>
+        </div>
+      </div>
+      <!-- Button and output column -->
+      <div class="col-md-8">
+
+        <div class="btn-group btn-group-justified" role="group" aria-label="Order by Highest Priority">
+          <div class=btn-group role="group">
+            <button type="button" class="btn btn-primary" ng-click="vstdaVm.order('priority')">Order by Highest Priority</button>
+            <span class="sortorder" ng-show="vstdaVm.predicate === 'priority'" ng-class="{reverse:reverse}"></span>
+          </div>
+          <div class=btn-group role="group">
+            <button type="button" class="btn btn-success" ng-click="vstdaVm.order('-priority')">Order by Lowest Priority</button>
+            <span class="sortorder" ng-show="vstdaVm.predicate === '-priority'" ng-class="{reverse:reverse}"></span>
+          </div>
+          <div class=btn-group role="group">
+            <button type="button" class="btn btn-info" ng-click="vstdaVm.order('taskText')">Order Alphabetically</button>
+            <span class="sortorder" ng-show="vstdaVm.predicate === 'taskText'" ng-class="{reverse:reverse}"></span>
+          </div>
+        </div>
+        <!-- List item output -->
+        <ul class="list-group" id="listMargin">
+            <li class="list-group-item" ng-repeat="item in vstdaVm.items | orderBy:vstdaVm.predicate:reverse"
+                ng-bind="item.dateAndText" ng-class="vstdaVm.getClassInfo(item.priority)" ng-dblClick=vstdaVm.DoubleClick(item)></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/toastr/toastr.js"></script>
+  <!-- endbower -->
+
+  <!-- inject:js -->
+  <script src="/app/app.js"></script>
+  <script src="/app/vsdto.controller.js"></script>
+  <script src="/app/vsdto.factory.js"></script>
+  <!-- endinject -->
+</body>
+
+</html>
